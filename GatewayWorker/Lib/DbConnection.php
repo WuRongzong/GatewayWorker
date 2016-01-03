@@ -1618,23 +1618,7 @@ class DbConnection
                 $this->closeConnection();
                 $this->connect();
                 
-                try {
-                    $this->sQuery = $this->pdo->prepare($query);
-                    $this->bindMore($parameters);
-                    if(!empty($this->parameters)) {
-                        foreach($this->parameters as $param)
-                        {
-                            $parameters = explode("\x7F",$param);
-                            $this->sQuery->bindParam($parameters[0],$parameters[1]);
-                        }
-                    }
-                    $this->succes  = $this->sQuery->execute();
-                }   
-                catch(\PDOException $ex)
-                {
-                    $this->rollBackTrans();
-                    throw $ex;
-                }
+                $this->execute($query, $parameters);
             }
             else
             {
